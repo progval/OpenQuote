@@ -26,7 +26,7 @@ public class PebkacItem extends SiteItem {
 		content = Jsoup.clean(content, whiteList);
 		content = content.replaceAll("<br /> *", "");
 		content = TextNode.createFromEncoded(content, "/").getWholeText();
-    	this.content = content;
+		this.content = content;
 	}
 	
 	public String toString() {

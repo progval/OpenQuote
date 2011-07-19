@@ -31,13 +31,13 @@ public class PebkacActivity extends SiteActivity {
 	}
 	public PebkacItem[] parsePage(String uri) throws IOException {
 		int foundItems = 0;
-        Document document = Jsoup.connect("http://www.pebkac.fr" + uri).get();
+		Document document = Jsoup.connect("http://www.pebkac.fr" + uri).get();
 		Elements elements = document.select("td.pebkacContent");
 		PebkacItem[] items = new PebkacItem[elements.size()];
-        for (Element element : elements) {
-        	items[foundItems] = new PebkacItem(element);
-        	foundItems++;
-        }
+		for (Element element : elements) {
+			items[foundItems] = new PebkacItem(element);
+			foundItems++;
+		}
 		
 		return items;
 	}

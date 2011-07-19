@@ -3,17 +3,14 @@
  */
 package com.github.progval.openquote.sites;
 
-// Project specifig
+// Project specific
 import com.github.progval.openquote.SiteItem;
 
 // Parsing HTML
 import org.jsoup.nodes.TextNode;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
-import org.jsoup.nodes.Node;
 import org.jsoup.Jsoup;
-
-import android.util.Log;
 
 
 /**
@@ -30,7 +27,7 @@ public class DtcItem extends SiteItem {
 		content = Jsoup.clean(content, whiteList);
 		content = content.replaceAll("<br /> *", "");
 		content = TextNode.createFromEncoded(content, "/").getWholeText();
-    	this.content = content;
+		this.content = content;
 	}
 	
 	public String toString() {

@@ -30,13 +30,13 @@ public class DtcActivity extends SiteActivity {
 	}
 	public DtcItem[] parsePage(String uri) throws IOException {
 		int foundItems = 0;
-        Document document = Jsoup.connect("http://danstonchat.com" + uri).get();
+		Document document = Jsoup.connect("http://danstonchat.com" + uri).get();
 		Elements elements = document.select("p.item-content a");
 		DtcItem[] items = new DtcItem[elements.size()];
-        for (Element element : elements) {
-        	items[foundItems] = new DtcItem(element);
-        	foundItems++;
-        }
+		for (Element element : elements) {
+			items[foundItems] = new DtcItem(element);
+			foundItems++;
+		}
 		
 		return items;
 	}

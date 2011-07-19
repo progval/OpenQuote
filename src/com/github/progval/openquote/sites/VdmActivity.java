@@ -29,13 +29,13 @@ public class VdmActivity extends SiteActivity {
 	}
 	public VdmItem[] parsePage(String uri) throws IOException {
 		int foundItems = 0;
-        Document document = Jsoup.connect("http://m.viedemerde.fr" + uri).get();
+		Document document = Jsoup.connect("http://m.viedemerde.fr" + uri).get();
 		Elements elements = document.select("ul.content li");
 		VdmItem[] items = new VdmItem[elements.size()];
-        for (Element element : elements) {
-        	items[foundItems] = new VdmItem(element);
-        	foundItems++;
-        }
+		for (Element element : elements) {
+			items[foundItems] = new VdmItem(element);
+			foundItems++;
+		}
 		
 		return items;
 	}
