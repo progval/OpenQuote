@@ -1,6 +1,7 @@
 package com.github.progval.openquote;
 
 // Project specifics
+import com.github.progval.openquote.sites.PebkacActivity;
 import com.github.progval.openquote.sites.VdmActivity;
 import com.github.progval.openquote.sites.DtcActivity;
 
@@ -29,6 +30,8 @@ public class Home extends Activity {
         buttonVdm.setOnClickListener(openVdm);
         Button buttonDtc = (Button)findViewById(R.id.buttonDtc);
         buttonDtc.setOnClickListener(openDtc);
+        Button buttonPebkac = (Button)findViewById(R.id.buttonPebkac);
+        buttonPebkac.setOnClickListener(openPebkac);
     }
 
     public OnClickListener openVdm = new OnClickListener() {
@@ -40,6 +43,12 @@ public class Home extends Activity {
     public OnClickListener openDtc = new OnClickListener() {
         public void onClick(View v) {
         	Intent intent = new Intent(Home.this, DtcActivity.class);
+        	startActivity(intent);
+        }
+    };
+    public OnClickListener openPebkac = new OnClickListener() {
+        public void onClick(View v) {
+        	Intent intent = new Intent(Home.this, PebkacActivity.class);
         	startActivity(intent);
         }
     };

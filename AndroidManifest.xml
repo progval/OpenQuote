@@ -18,6 +18,8 @@
         </activity>
         <activity android:name=".sites.DtcActivity">
         </activity>
+        <activity android:name=".sites.PebkacActivity">
+        </activity>
 
     </application>
 </manifest>
