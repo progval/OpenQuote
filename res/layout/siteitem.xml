@@ -20,6 +20,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:paddingLeft="6dip"
-    android:textSize="14px"
-    android:minHeight="5px"
-/>
+    android:paddingBottom="10px"
+    android:paddingTop="10px"
+    android:textSize="20px"
+    android:minHeight="5px"/>
