@@ -2,6 +2,7 @@ package com.github.progval.openquote;
 
 // Project specifics
 import com.github.progval.openquote.sites.VdmActivity;
+import com.github.progval.openquote.sites.DtcActivity;
 
 // User interface
 import android.view.View.OnClickListener;
@@ -26,11 +27,19 @@ public class Home extends Activity {
         setContentView(R.layout.home);
         Button buttonVdm = (Button)findViewById(R.id.buttonVdm);
         buttonVdm.setOnClickListener(openVdm);
+        Button buttonDtc = (Button)findViewById(R.id.buttonDtc);
+        buttonDtc.setOnClickListener(openDtc);
     }
 
     public OnClickListener openVdm = new OnClickListener() {
         public void onClick(View v) {
         	Intent intent = new Intent(Home.this, VdmActivity.class);
+        	startActivity(intent);
+        }
+    };
+    public OnClickListener openDtc = new OnClickListener() {
+        public void onClick(View v) {
+        	Intent intent = new Intent(Home.this, DtcActivity.class);
         	startActivity(intent);
         }
     };

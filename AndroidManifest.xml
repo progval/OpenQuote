@@ -16,6 +16,8 @@
         </activity>
         <activity android:name=".sites.VdmActivity">
         </activity>
+        <activity android:name=".sites.DtcActivity">
+        </activity>
 
     </application>
 </manifest>
