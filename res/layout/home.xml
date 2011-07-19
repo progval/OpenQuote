@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+    <Button android:layout_height="wrap_content" android:text="VDM" android:id="@+id/buttonVdm" android:layout_width="wrap_content"></Button>
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="DTC" android:id="@+id/buttonDtc"></Button>
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PEBKAC" android:id="@+id/buttonPebkac"></Button>
+</TableLayout>
