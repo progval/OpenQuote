@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 // Android
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -62,7 +63,11 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 			}
 		}
 		catch (IOException e) {
-			this.addItem("The quotes could not be loaded due to a network issue.");
+			AlertDialog.Builder adb = new AlertDialog.Builder(this);
+			adb.setTitle("Error");
+			adb.setMessage("The quotes could not be loaded due to a network issue.");
+			adb.setPositiveButton("Ok", null);
+			adb.show();
 		}
 	}
 	
