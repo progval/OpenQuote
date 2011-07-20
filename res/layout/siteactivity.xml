@@ -8,28 +8,28 @@
             android:layout_height="wrap_content"
             android:id="@+id/navigation">
         <Button
-                android:text="Latest"
+                android:text="@string/siteactivity_button_latest"
                 android:textSize="12dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonLatest">
         </Button>
         <Button
-                android:text="Top"
+                android:text="@string/siteactivity_button_top"
                 android:textSize="12dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonTop">
         </Button>
         <Button
-                android:text="Random"
+                android:text="@string/siteactivity_button_random"
                 android:textSize="12dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonRandom">
         </Button>
         <TextView
-                android:text="Page: "
+                android:text="@string/siteactivity_text_page"
                 android:textSize="12dp"
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"

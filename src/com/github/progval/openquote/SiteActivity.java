@@ -124,14 +124,14 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	 *************************************/
 	/** Same as showErrorDialog() with a generic error message for network issues */
 	public void showIOExceptionDialog() {
-		this.showErrorDialog("The quotes could not be loaded due to a network issue.");
+		this.showErrorDialog(getResources().getString(R.string.siteactivity_network_error_message));
 	}
 	/** Display an error dialog */
 	public void showErrorDialog(String message) {
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
-		adb.setTitle("Error");
+		adb.setTitle(getResources().getString(R.string.siteactivity_error_title));
 		adb.setMessage(message);
-		adb.setPositiveButton("Ok", null);
+		adb.setPositiveButton(getResources().getString(R.string.siteactivity_error_button), null);
 		adb.show();
 	}
 
@@ -177,7 +177,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		ProgressDialog dialog;
 
 		protected void onPreExecute() {
-			dialog = ProgressDialog.show(SiteActivity.this, "", "Loading the quotes. Please wait...", true);
+			dialog = ProgressDialog.show(SiteActivity.this, "", getResources().getString(R.string.siteactivity_loading_quotes), true);
 		}
 
 		protected Void doInBackground(Void... foo) {
@@ -197,10 +197,10 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		protected void onPostExecute(Void foo) {
 			dialog.dismiss();
 			if (errorLog != null) {
-				SiteActivity.this.showErrorDialog("Unknown error: " + errorLog);
+				SiteActivity.this.showErrorDialog(String.format(getResources().getString(R.string.siteactivity_unknown_error), errorLog));
 			}
 			else if (items == null) {
-				SiteActivity.this.showErrorDialog("This is strange... there is no results, but this is not an error.");
+				SiteActivity.this.showErrorDialog(getResources().getString(R.string.siteactivity_no_errors_no_results));
 			}
 			else if (items.length > 0) {
 				SiteActivity.this.clearList();
@@ -246,6 +246,19 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	/** Format and set the title according to the activity state. */
 	public void updateTitle() {
 		int humanReadablePage = page - this.getLowestPageNumber() + 1;
-		setTitle(this.getName() + " > " + this.mode.toString().toLowerCase() + " page " + String.valueOf(humanReadablePage));
+		setTitle(String.format(getResources().getString(R.string.siteactivity_title), this.getName(), this.getModeString(), humanReadablePage));
+	}
+	/** Returns the mode in the current locale */
+	public String getModeString() {
+		switch (this.mode) {
+			case LATEST:
+				return getResources().getString(R.string.siteactivity_mode_latest);
+			case TOP:
+				return getResources().getString(R.string.siteactivity_mode_top);
+			case RANDOM:
+				return getResources().getString(R.string.siteactivity_mode_random);
+			default:
+				return getResources().getString(R.string.siteactivity_mode_unknown);
+		}
 	}
 }
