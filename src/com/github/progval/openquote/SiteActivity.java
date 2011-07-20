@@ -155,6 +155,12 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	private class AsyncQuotesFetcher extends AsyncTask<Void, Void, Void> {
 		private SiteItem[] items;
 		private String errorLog;
+		ProgressDialog dialog;
+
+		protected void onPreExecute() {
+			dialog = ProgressDialog.show(SiteActivity.this, "", "Loading the quotes. Please wait...", true);
+		}
+
 		protected Void doInBackground(Void... foo) {
 			try {
 				items = SiteActivity.this.getQuotes();
@@ -170,6 +176,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 			return null;
 		}
 		protected void onPostExecute(Void foo) {
+			dialog.dismiss();
 			if (errorLog != null) {
 				SiteActivity.this.showErrorDialog("Unknown error: " + errorLog);
 			}
