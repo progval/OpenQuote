@@ -7,20 +7,19 @@ package com.github.progval.openquote;
 import com.github.progval.openquote.SiteItem;
 
 // User interface
-import android.util.Log;
-import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.view.View;
 
-import java.lang.Void;
+// Utils
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
+import java.lang.Void;
 
 // Android
+import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -188,6 +187,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 				for (SiteItem item : items) {
 					SiteActivity.this.addItem(item.toString(), false);
 				}
+				adapter.notifyDataSetChanged();
 			}
 			else {
 				SiteActivity.this.showIOExceptionDialog();
@@ -211,13 +211,13 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	}
 	/** Prepend an item to the list */
 	public void addItem(String item) {
-		 listItems.add(0, item);
-		 adapter.notifyDataSetChanged();
+		listItems.add(0, item);
+		adapter.notifyDataSetChanged();
 	}
 	/** Clear the list */
 	public void clearList() {
 		listItems.clear();
-		 adapter.notifyDataSetChanged();
+		adapter.notifyDataSetChanged();
 	}
 
 	/* ************************************
