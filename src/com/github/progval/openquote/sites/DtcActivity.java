@@ -20,11 +20,21 @@ import org.jsoup.Jsoup;
  *
  */
 public class DtcActivity extends SiteActivity {
-	public DtcItem[] getLatest() throws IOException {
-		return this.parsePage("/latest.html");
+	public String getName() { return "DTC"; }
+	public int getLowestPageNumber() { return 1; }
+
+	public DtcItem[] getLatest(int page) throws IOException {
+		return this.parsePage("/latest/" + String.valueOf(page) +".html");
 	}
-	public DtcItem[] getTop() throws IOException {
-		return this.parsePage("/top50.html");
+	public DtcItem[] getTop(int page) throws IOException {
+		if (page != this.getLowestPageNumber()) {
+			this.showErrorDialog("This site does not support this feature.");
+			this.page = this.getLowestPageNumber();
+			return new DtcItem[0];
+		}
+		else {
+			return this.parsePage("/top50.html");
+		}
 	}
 	public DtcItem[] parsePage(String uri) throws IOException {
 		int foundItems = 0;

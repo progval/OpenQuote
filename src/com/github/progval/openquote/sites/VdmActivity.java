@@ -19,11 +19,14 @@ import org.jsoup.Jsoup;
  * @author ProgVal
  */
 public class VdmActivity extends SiteActivity {
-	public VdmItem[] getLatest() throws IOException {
-		return this.parsePage("/");
+	public String getName() { return "VDM"; }
+	public int getLowestPageNumber() { return 0; }
+
+	public VdmItem[] getLatest(int page) throws IOException {
+		return this.parsePage("/?page=" + String.valueOf(page));
 	}
-	public VdmItem[] getTop() throws IOException {
-		return this.parsePage("/tops");
+	public VdmItem[] getTop(int page) throws IOException {
+		return this.parsePage("/tops?page=" + String.valueOf(page));
 	}
 	public VdmItem[] parsePage(String uri) throws IOException {
 		int foundItems = 0;
@@ -38,7 +41,7 @@ public class VdmActivity extends SiteActivity {
 			items[foundItems] = new VdmItem(element);
 			foundItems++;
 		}
-		
+
 		return items;
 	}
 }

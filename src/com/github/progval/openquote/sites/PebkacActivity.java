@@ -21,11 +21,14 @@ import org.jsoup.Jsoup;
  *
  */
 public class PebkacActivity extends SiteActivity {
-	public PebkacItem[] getLatest() throws IOException {
-		return this.parsePage("/");
+	public String getName() { return "PEBKAC"; }
+	public int getLowestPageNumber() { return 1; }
+
+	public PebkacItem[] getLatest(int page) throws IOException {
+		return this.parsePage("/index.php?page=" + String.valueOf(page));
 	}
-	public PebkacItem[] getTop() throws IOException {
-		return this.parsePage("/index.php?p=top");
+	public PebkacItem[] getTop(int page) throws IOException {
+		return this.parsePage("/index.php?p=top&page=" + String.valueOf(page));
 	}
 	public PebkacItem[] parsePage(String uri) throws IOException {
 		int foundItems = 0;
@@ -36,7 +39,7 @@ public class PebkacActivity extends SiteActivity {
 			items[foundItems] = new PebkacItem(element);
 			foundItems++;
 		}
-		
+
 		return items;
 	}
 }
