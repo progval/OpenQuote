@@ -36,6 +36,9 @@ public class DtcActivity extends SiteActivity {
 			return this.parsePage("/top50.html");
 		}
 	}
+	public DtcItem[] getRandom(int page) throws IOException {
+		return this.parsePage("/random.html");
+	}
 	public DtcItem[] parsePage(String uri) throws IOException {
 		int foundItems = 0;
 		Document document = Jsoup.connect("http://danstonchat.com" + uri).get();

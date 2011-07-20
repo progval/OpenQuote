@@ -28,6 +28,9 @@ public class VdmActivity extends SiteActivity {
 	public VdmItem[] getTop(int page) throws IOException {
 		return this.parsePage("/tops?page=" + String.valueOf(page));
 	}
+	public VdmItem[] getRandom(int page) throws IOException {
+		return this.parsePage("/aleatoire");
+	}
 	public VdmItem[] parsePage(String uri) throws IOException {
 		int foundItems = 0;
 		Document document = Jsoup.connect("http://m.viedemerde.fr" + uri).get();

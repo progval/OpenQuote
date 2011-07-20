@@ -9,19 +9,46 @@
             android:id="@+id/navigation">
         <Button
                 android:text="Latest"
+                android:textSize="12dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonLatest">
         </Button>
         <Button
                 android:text="Top"
+                android:textSize="12dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonTop">
         </Button>
-        <TextView android:text="Page: " android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-        <Button android:text="Previous" android:id="@+id/buttonPrevious" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-        <Button android:text="Next" android:id="@+id/buttonNext" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+        <Button
+                android:text="Random"
+                android:textSize="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonRandom">
+        </Button>
+        <TextView
+                android:text="Page: "
+                android:textSize="12dp"
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+        </TextView>
+        <Button
+                android:text="&lt;="
+                android:textSize="12dp"
+                android:id="@+id/buttonPrevious"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+        </Button>
+        <Button
+                android:text="=&gt;"
+                android:textSize="12dp"
+                android:id="@+id/buttonNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+        </Button>
     </LinearLayout>
     <ListView
              android:id="@android:id/list"

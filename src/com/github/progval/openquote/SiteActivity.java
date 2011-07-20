@@ -41,7 +41,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	 *  State
 	 *************************************/
 	public enum Mode {
-	    LATEST, TOP
+	    LATEST, TOP, RANDOM
 	}
 	protected Mode mode;
 	protected int page;
@@ -78,11 +78,13 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	private void bindButtons() {
 		findViewById(R.id.buttonLatest).setOnClickListener(this);
 		findViewById(R.id.buttonTop).setOnClickListener(this);
+		findViewById(R.id.buttonRandom).setOnClickListener(this);
 		findViewById(R.id.buttonPrevious).setOnClickListener(this);
 		findViewById(R.id.buttonNext).setOnClickListener(this);
 	}
 	/** Called when any button is clicked. */
 	public void onClick(View v) {
+		enablePageChange(true);
 		switch (v.getId()) {
 			case R.id.buttonLatest: // Display latest quotes
 				this.mode = Mode.LATEST;
@@ -92,6 +94,12 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 			case R.id.buttonTop: // Display top quotes
 				this.mode = Mode.TOP;
 				this.page = this.getLowestPageNumber();
+				this.refresh();
+				break;
+			case R.id.buttonRandom: // Display random quotes
+				this.mode = Mode.RANDOM;
+				this.page = this.getLowestPageNumber();
+				enablePageChange(false);
 				this.refresh();
 				break;
 			case R.id.buttonPrevious: // Open previous page
@@ -105,6 +113,10 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 				this.refresh();
 				break;
 		}
+	}
+	public void enablePageChange(boolean mode) {
+		findViewById(R.id.buttonPrevious).setEnabled(mode);
+		findViewById(R.id.buttonNext).setEnabled(mode);
 	}
 
 	/* ************************************
@@ -132,6 +144,8 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 				return this.getLatest(this.page);
 			case TOP:
 				return this.getTop(this.page);
+			case RANDOM:
+				return this.getRandom(this.page);
 		}
 		return new SiteItem[0];
 	}
@@ -147,6 +161,12 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	}
 	/** Populate the activity interface with the n-th page of top quotes */
 	public abstract SiteItem[] getTop(int page) throws IOException;
+	/** Populate the activity interface with random quotes */
+	public SiteItem[] getRandom() throws IOException {
+		return this.getRandom(this.getLowestPageNumber());
+	}
+	/** Populate the activity interface with the n-th page of random quotes */
+	public abstract SiteItem[] getRandom(int page) throws IOException;
 
 	/* ************************************
 	 *  Display quotes

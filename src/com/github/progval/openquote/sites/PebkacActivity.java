@@ -30,6 +30,9 @@ public class PebkacActivity extends SiteActivity {
 	public PebkacItem[] getTop(int page) throws IOException {
 		return this.parsePage("/index.php?p=top&page=" + String.valueOf(page));
 	}
+	public PebkacItem[] getRandom(int page) throws IOException {
+		return this.parsePage("/pebkac-aleatoires.html");
+	}
 	public PebkacItem[] parsePage(String uri) throws IOException {
 		int foundItems = 0;
 		Document document = Jsoup.connect("http://www.pebkac.fr" + uri).get();
