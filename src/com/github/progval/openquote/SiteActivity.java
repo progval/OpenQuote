@@ -7,16 +7,21 @@ package com.github.progval.openquote;
 import com.github.progval.openquote.SiteItem;
 
 // User interface
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 
+import java.lang.Void;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 // Android
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 /**
@@ -79,32 +84,27 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	}
 	/** Called when any button is clicked. */
 	public void onClick(View v) {
-		try {
-			switch (v.getId()) {
-				case R.id.buttonLatest: // Display latest quotes
-					this.mode = Mode.LATEST;
-					this.page = this.getLowestPageNumber();
-					this.populate(this.getLatest());
-					break;
-				case R.id.buttonTop: // Display top quotes
-					this.mode = Mode.TOP;
-					this.page = this.getLowestPageNumber();
-					this.populate(this.getTop());
-					break;
-				case R.id.buttonPrevious: // Open previous page
-					if (this.page > this.getLowestPageNumber()) {
-						this.page--;
-					}
-					this.refresh();
-					break;
-				case R.id.buttonNext: // Open next page
-					this.page++;
-					this.refresh();
-					break;
-			}
-		}
-		catch (IOException e) {
-			this.showIOExceptionDialog();
+		switch (v.getId()) {
+			case R.id.buttonLatest: // Display latest quotes
+				this.mode = Mode.LATEST;
+				this.page = this.getLowestPageNumber();
+				this.refresh();
+				break;
+			case R.id.buttonTop: // Display top quotes
+				this.mode = Mode.TOP;
+				this.page = this.getLowestPageNumber();
+				this.refresh();
+				break;
+			case R.id.buttonPrevious: // Open previous page
+				if (this.page > this.getLowestPageNumber()) {
+					this.page--;
+				}
+				this.refresh();
+				break;
+			case R.id.buttonNext: // Open next page
+				this.page++;
+				this.refresh();
+				break;
 		}
 	}
 
@@ -127,6 +127,15 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	/* ************************************
 	 *  Fetch quotes
 	 *************************************/
+	private SiteItem[] getQuotes() throws IOException {
+		switch(this.mode) {
+			case LATEST:
+				return this.getLatest(this.page);
+			case TOP:
+				return this.getTop(this.page);
+		}
+		return new SiteItem[0];
+	}
 	/** Populate the activity interface with latest quotes */
 	public SiteItem[] getLatest() throws IOException {
 		return this.getLatest(this.getLowestPageNumber());
@@ -143,32 +152,45 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	/* ************************************
 	 *  Display quotes
 	 *************************************/
-	/** Refresh the quotes. */
-	public void refresh() {
-		this.updateTitle();
-		try {
-			switch(this.mode) {
-				case LATEST:
-					this.populate(this.getLatest(page));
-					break;
-				case TOP:
-					this.populate(this.getTop(page));
-					break;
+	private class AsyncQuotesFetcher extends AsyncTask<Void, Void, Void> {
+		private SiteItem[] items;
+		private String errorLog;
+		protected Void doInBackground(Void... foo) {
+			try {
+				items = SiteActivity.this.getQuotes();
 			}
+			catch (Exception e) {
+				if (e instanceof IOException) {
+					items = new SiteItem[0];
+				}
+				else {
+					errorLog = e.toString();
+				}
+			}
+			return null;
 		}
-		catch (IOException e) {
-			this.showIOExceptionDialog();
+		protected void onPostExecute(Void foo) {
+			if (errorLog != null) {
+				SiteActivity.this.showErrorDialog("Unknown error: " + errorLog);
+			}
+			else if (items == null) {
+				SiteActivity.this.showErrorDialog("This is strange... there is no results, but this is not an error.");
+			}
+			else if (items.length > 0) {
+				SiteActivity.this.clearList();
+				for (SiteItem item : items) {
+					SiteActivity.this.addItem(item.toString(), false);
+				}
+			}
+			else {
+				SiteActivity.this.showIOExceptionDialog();
+			}
 		}
 	}
-	/** Takes a list of items, and add them to the ListView */
-	public void populate(SiteItem[] latest) {
+	/** Load the quotes, and add them to the ListView */
+	public void refresh() {
 		this.updateTitle();
-		if (latest.length > 0) {
-			this.clearList();
-			for (SiteItem item : latest) {
-				this.addItem(item.toString(), false);
-			}
-		}
+		new AsyncQuotesFetcher().execute();
 	}
 	/** Add an item to the list */
 	private void addItem(String item, boolean top) {
