@@ -22,5 +22,5 @@
     android:paddingLeft="6dip"
     android:paddingBottom="10px"
     android:paddingTop="10px"
-    android:textSize="20px"
+    android:textSize="12dp"
     android:minHeight="5px"/>
