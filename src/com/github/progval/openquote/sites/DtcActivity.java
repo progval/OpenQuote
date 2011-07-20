@@ -28,6 +28,14 @@ public class DtcActivity extends SiteActivity {
 	        return new DtcItem[0];
 		}
 	}
+	public DtcItem[] getTop() {
+		try {
+			return this.parsePage("/top50.html");
+		}
+		catch (IOException e) {
+	        return new DtcItem[0];
+		}
+	}
 	public DtcItem[] parsePage(String uri) throws IOException {
 		int foundItems = 0;
 		Document document = Jsoup.connect("http://danstonchat.com" + uri).get();

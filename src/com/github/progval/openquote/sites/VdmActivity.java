@@ -27,10 +27,22 @@ public class VdmActivity extends SiteActivity {
 	        return new VdmItem[0];
 		}
 	}
+	public VdmItem[] getTop() {
+		try {
+			return this.parsePage("/tops");
+		}
+		catch (IOException e) {
+	        return new VdmItem[0];
+		}
+	}
 	public VdmItem[] parsePage(String uri) throws IOException {
 		int foundItems = 0;
 		Document document = Jsoup.connect("http://m.viedemerde.fr" + uri).get();
-		Elements elements = document.select("ul.content li");
+		
+		/* We use ":contain(VDM)" in order to remove the leading
+		 * "Je valide | Tu l'as bien mérité" in Top quotes.
+		 */
+		Elements elements = document.select("ul.content li:contains(VDM)");
 		VdmItem[] items = new VdmItem[elements.size()];
 		for (Element element : elements) {
 			items[foundItems] = new VdmItem(element);

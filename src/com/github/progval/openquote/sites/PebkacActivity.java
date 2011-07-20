@@ -29,6 +29,14 @@ public class PebkacActivity extends SiteActivity {
 	        return new PebkacItem[0];
 		}
 	}
+	public PebkacItem[] getTop() {
+		try {
+			return this.parsePage("/index.php?p=top");
+		}
+		catch (IOException e) {
+	        return new PebkacItem[0];
+		}
+	}
 	public PebkacItem[] parsePage(String uri) throws IOException {
 		int foundItems = 0;
 		Document document = Jsoup.connect("http://www.pebkac.fr" + uri).get();
