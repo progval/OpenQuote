@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 // Android
@@ -40,29 +41,35 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 				R.layout.siteitem,
 				listItems);
 		setListAdapter(adapter);
-		this.populate(this.getLatest());
 
 		Button buttonLatest = (Button)findViewById(R.id.buttonLatest);
 		buttonLatest.setOnClickListener(this);
 		Button buttonTop = (Button)findViewById(R.id.buttonTop);
 		buttonTop.setOnClickListener(this);
+
+		this.onClick(buttonLatest);
 	}
 
 	public void onClick(View v) {
-		switch (v.getId()) {
-			case R.id.buttonLatest:
-				this.populate(this.getLatest());
-				break;
-			case R.id.buttonTop:
-				this.populate(this.getTop());
-				break;
+		try {
+			switch (v.getId()) {
+				case R.id.buttonLatest:
+					this.populate(this.getLatest());
+					break;
+				case R.id.buttonTop:
+					this.populate(this.getTop());
+					break;
+			}
+		}
+		catch (IOException e) {
+			this.addItem("The quotes could not be loaded due to a network issue.");
 		}
 	}
 	
 	/** Populate the activity interface with latest quotes */
-	public abstract SiteItem[] getLatest();
+	public abstract SiteItem[] getLatest()  throws IOException;
 	/** Populate the activity interface with top quotes */
-	public abstract SiteItem[] getTop();
+	public abstract SiteItem[] getTop()  throws IOException;
 
 	/** Takes a list of items, and add them to the ListView */
 	public void populate(SiteItem[] latest) {

@@ -20,21 +20,11 @@ import org.jsoup.Jsoup;
  *
  */
 public class DtcActivity extends SiteActivity {
-	public DtcItem[] getLatest() {
-		try {
-			return this.parsePage("/latest.html");
-		}
-		catch (IOException e) {
-	        return new DtcItem[0];
-		}
+	public DtcItem[] getLatest() throws IOException {
+		return this.parsePage("/latest.html");
 	}
-	public DtcItem[] getTop() {
-		try {
-			return this.parsePage("/top50.html");
-		}
-		catch (IOException e) {
-	        return new DtcItem[0];
-		}
+	public DtcItem[] getTop() throws IOException {
+		return this.parsePage("/top50.html");
 	}
 	public DtcItem[] parsePage(String uri) throws IOException {
 		int foundItems = 0;
