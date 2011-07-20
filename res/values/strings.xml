@@ -16,4 +16,9 @@
     <string name="siteactivity_mode_unknown">Unknown mode</string>
     <string name="siteactivity_error_title">Error</string>
     <string name="siteactivity_error_button">Ok</string>
+    <string name="home_menu_about">About</string>
+    <string name="about_developper">Software written by Valentin \&quot;ProgVal\&quot; Lorentz</string>
+    <string name="about_translator">Translation by ProgVal.</string>
+    <string name="about_libraries">This software includes:\n* The Jsoup HTML parsing library,\n* An icon generated with the Android Asset Studio...\n* ...from an image of the GNOME project.</string>
+    <string name="about_title">About</string>
 </resources>

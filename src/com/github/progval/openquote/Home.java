@@ -9,10 +9,17 @@ import com.github.progval.openquote.sites.DtcActivity;
 import android.view.View.OnClickListener;
 import android.content.Intent;
 import android.widget.Button;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 // Android
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.os.Bundle;
 
 /**
@@ -52,4 +59,25 @@ public class Home extends Activity {
 			startActivity(intent);
 		}
 	};
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.home, menu);
+	    return true;
+	}
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+		    case R.id.home_menu_about:
+				LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+				View layout = inflater.inflate(R.layout.about, (ViewGroup) findViewById(R.id.home_menu_about));
+				Builder adb = new AlertDialog.Builder(this);
+				adb.setTitle(getResources().getString(R.string.about_title));
+				adb.setView(layout);
+				adb.create();
+				adb.show();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
 }
