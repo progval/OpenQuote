@@ -20,6 +20,8 @@
         </activity>
         <activity android:name=".sites.PebkacActivity">
 		</activity>
+        <activity android:name=".sites.BashActivity">
+        </activity>
 
 	</application>
 </manifest>
