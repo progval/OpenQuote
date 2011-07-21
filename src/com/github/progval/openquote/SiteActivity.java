@@ -306,7 +306,12 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 			return null;
 		}
 		protected void onPostExecute(Void foo) {
-			dialog.dismiss();
+			try {
+				dialog.dismiss();
+			}
+			catch (IllegalArgumentException e) {
+				// Window has leaked
+			}
 			if (errorLog != null) {
 				SiteActivity.this.showErrorDialog(String.format(getResources().getString(R.string.siteactivity_unknown_error), errorLog));
 			}
