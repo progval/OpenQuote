@@ -22,4 +22,7 @@
     <string name="about_libraries">Ce logiciel inclut :\n* La bibliothèque de parsage HTML Jsoup,\n* Une icône générée avec l\'Android Asset Studio à partir...\n* ...d\'une image du projet GNOME.</string>
     <string name="about_title">À propos</string>
     <string name="siteactivity_context_copy">Copier dans le presse-papier</string>
+    <string name="siteactivity_context_share">Partager</string>
+    <string name="siteactivity_share_subject">Citation partagée via OpenQuote.</string>
+    <string name="siteactivity_share_window_title">Partager</string>
 </resources>

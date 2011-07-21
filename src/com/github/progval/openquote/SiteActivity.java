@@ -27,6 +27,7 @@ import java.lang.Void;
 import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -144,6 +145,13 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 				ClipboardManager clipboard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
 				clipboard.setText(listItemsMetadata.get(clickedQuote).getContent());
 				return true;
+			case R.id.siteactivity_context_share:
+				Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+				shareIntent.setType("text/plain");
+				shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.siteactivity_share_subject));
+				shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, listItemsMetadata.get(clickedQuote).getContent());
+
+				startActivity(Intent.createChooser(shareIntent, getResources().getString(R.string.siteactivity_share_window_title)));
 		}
 		return false;
 	}

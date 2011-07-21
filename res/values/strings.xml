@@ -22,4 +22,7 @@
     <string name="about_libraries">This software includes:\n* The Jsoup HTML parsing library,\n* An icon generated with the Android Asset Studio...\n* ...from an image of the GNOME project.</string>
     <string name="about_title">About</string>
     <string name="siteactivity_context_copy">Copy to clipboard</string>
+    <string name="siteactivity_context_share">Share</string>
+    <string name="siteactivity_share_subject">Quote shared via OpenQuote.</string>
+    <string name="siteactivity_share_window_title">Share</string>
 </resources>
