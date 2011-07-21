@@ -7,8 +7,15 @@ package com.github.progval.openquote;
 import com.github.progval.openquote.SiteItem;
 
 // User interface
+import android.text.ClipboardManager;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 // Utils
@@ -49,6 +56,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	/* ************************************
 	 *  Storage
 	 *************************************/
+	private ArrayList<SiteItem> listItemsMetadata = new ArrayList<SiteItem>();
 	private ArrayList<String> listItems = new ArrayList<String>();
 	ArrayAdapter<String> adapter;
 
@@ -65,6 +73,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		this.page = this.getLowestPageNumber();
 		this.setAdapter();
 		this.bindButtons();
+		this.initializeContextMenu();
 		this.onClick(findViewById(R.id.buttonLatest));
 	}
 	private void setAdapter() {
@@ -81,6 +90,11 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		findViewById(R.id.buttonRandom).setOnClickListener(this);
 		findViewById(R.id.buttonPrevious).setOnClickListener(this);
 		findViewById(R.id.buttonNext).setOnClickListener(this);
+	}
+	/** Initialize the context menu. */
+	private void initializeContextMenu() {
+		ListView listView = getListView();
+		registerForContextMenu(listView);
 	}
 	/** Called when any button is clicked. */
 	public void onClick(View v) {
@@ -117,6 +131,21 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	public void enablePageChange(boolean mode) {
 		findViewById(R.id.buttonPrevious).setEnabled(mode);
 		findViewById(R.id.buttonNext).setEnabled(mode);
+	}
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.quote_context_menu, menu);
+	}
+	public boolean onContextItemSelected(MenuItem item) {
+		int clickedQuote = ((AdapterContextMenuInfo)item.getMenuInfo()).position;
+		switch (item.getItemId()) {
+			case R.id.siteactivity_context_copy:
+				ClipboardManager clipboard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+				clipboard.setText(listItemsMetadata.get(clickedQuote).getContent());
+				return true;
+		}
+		return false;
 	}
 
 	/* ************************************
@@ -205,7 +234,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 			else if (items.length > 0) {
 				SiteActivity.this.clearList();
 				for (SiteItem item : items) {
-					SiteActivity.this.addItem(item.toString(), false);
+					SiteActivity.this.addItem(item, false);
 				}
 				adapter.notifyDataSetChanged();
 			}
@@ -220,19 +249,20 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		new AsyncQuotesFetcher().execute();
 	}
 	/** Add an item to the list */
-	private void addItem(String item, boolean top) {
+	private void addItem(SiteItem item, boolean top) {
 		if (top) {
-			listItems.add(0, item);
+			listItemsMetadata.add(0, item);
+			listItems.add(0, item.toString());
 		}
 		else {
-			listItems.add(item);
+			listItemsMetadata.add( item);
+			listItems.add(item.toString());
 		}
 		adapter.notifyDataSetChanged();
 	}
 	/** Prepend an item to the list */
-	public void addItem(String item) {
-		listItems.add(0, item);
-		adapter.notifyDataSetChanged();
+	public void addItem(SiteItem item) {
+		addItem(item, true);
 	}
 	/** Clear the list */
 	public void clearList() {

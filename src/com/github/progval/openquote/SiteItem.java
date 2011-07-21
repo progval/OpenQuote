@@ -10,4 +10,7 @@ public abstract class SiteItem {
 	public String getContent() {
 		return this.content;
 	}
+	public String toString() {
+		return this.getContent();
+	}
 }
