@@ -5,7 +5,7 @@
     <string name="siteactivity_loading_quotes">Loading the quotes. Please wait...</string>
     <string name="siteactivity_unknown_error">Unknown error: %s</string>
     <string name="siteactivity_no_errors_no_results">This is strange... there is no results, but this is not an error.</string>
-    <string name="siteactivity_title">%1$s &gt; %2$s page %3$s</string>
+    <string name="siteactivity_title">%1$s &gt; %2$s &gt; page %3$s</string>
     <string name="siteactivity_button_latest">Latest</string>
     <string name="siteactivity_button_top">Top</string>
     <string name="siteactivity_button_random">Random</string>
@@ -25,4 +25,9 @@
     <string name="siteactivity_context_share">Share</string>
     <string name="siteactivity_share_subject">Quote shared via OpenQuote.</string>
     <string name="siteactivity_share_window_title">Share</string>
+    <string name="siteactivity_menu_gotopage">Go to page</string>
+    <string name="siteactivity_gotopage_window_title">Go to page</string>
+    <string name="siteactivity_gotopage_error_disabled">You cannot got to a page in that mode.</string>
+    <string name="siteactivity_gotopage_button_go">Go</string>
+    <string name="siteactivity_gotopage_button_cancel">Cancel</string>
 </resources>
