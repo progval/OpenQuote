@@ -25,4 +25,9 @@
     <string name="siteactivity_context_share">Partager</string>
     <string name="siteactivity_share_subject">Citation partagée via OpenQuote.</string>
     <string name="siteactivity_share_window_title">Partager</string>
+    <string name="siteactivity_menu_gotopage">Aller à la page</string>
+    <string name="siteactivity_gotopage_window_title">Aller à la page</string>
+    <string name="siteactivity_gotopage_error_disabled">Vous ne pouvez pas aller vers une page dans ce mode.</string>
+    <string name="siteactivity_gotopage_button_go">Aller</string>
+    <string name="siteactivity_gotopage_button_cancel">Annuler</string>
 </resources>

@@ -8,15 +8,24 @@ import com.github.progval.openquote.SiteItem;
 
 // User interface
 import android.text.ClipboardManager;
+import android.text.InputType;
+import android.text.method.NumberKeyListener;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.KeyEvent;
+import android.text.Editable;
+import android.util.Log;
 
 // Utils
 import java.io.IOException;
@@ -27,6 +36,8 @@ import java.lang.Void;
 import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -53,6 +64,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	}
 	protected Mode mode;
 	protected int page;
+	protected boolean enablePageChange = true;
 
 	/* ************************************
 	 *  Storage
@@ -97,7 +109,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		ListView listView = getListView();
 		registerForContextMenu(listView);
 	}
-	/** Called when any button is clicked. */
+	/** Called when any button (not in a Dialog) is clicked. */
 	public void onClick(View v) {
 		enablePageChange(true);
 		switch (v.getId()) {
@@ -132,6 +144,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	public void enablePageChange(boolean mode) {
 		findViewById(R.id.buttonPrevious).setEnabled(mode);
 		findViewById(R.id.buttonNext).setEnabled(mode);
+		enablePageChange = mode;
 	}
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
@@ -154,6 +167,73 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 				startActivity(Intent.createChooser(shareIntent, getResources().getString(R.string.siteactivity_share_window_title)));
 		}
 		return false;
+	}
+
+	/* ************************************
+	 *  Context menu
+	 *************************************/
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.siteactivity, menu);
+	    return true;
+	}
+	void validateDialog(DialogInterface dialog, EditText pageNumber)  {
+		try {
+			page = Integer.parseInt(pageNumber.getText().toString()) - 1 + SiteActivity.this.getLowestPageNumber();
+			refresh();
+			dialog.dismiss();
+		}
+		catch (NumberFormatException e) {
+			// Never trust user input
+		}
+	};
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+		    case R.id.siteactivity_menu_gotopage:
+		    	if (enablePageChange) {
+		    		// Create TextEdit
+			    	final EditText pageNumber = new EditText(this);
+			    	pageNumber.setKeyListener(new NumberKeyListener(){
+			    		    @Override
+			    		    protected char[] getAcceptedChars() {
+			    		        char[] numberChars = {'1','2','3','4','5','6','7','8','9','0'}; // No dots.
+			    		        return numberChars;
+			    		    }
+	
+						public int getInputType() {
+							return InputType.TYPE_CLASS_NUMBER; // Set keyboard to numeric mode.
+						}
+			    		});
+			    	
+			    	// Create listener
+			    	DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							switch (which) {
+								case DialogInterface.BUTTON_POSITIVE:
+									validateDialog(dialog, pageNumber);
+									break;
+								case DialogInterface.BUTTON_NEGATIVE:
+									dialog.dismiss();
+									break;
+							}
+						}
+			    	};
+			    	
+			    	// Build dialog
+			    	AlertDialog.Builder adb = new AlertDialog.Builder(this);
+			    	adb.setTitle(getResources().getString(R.string.siteactivity_gotopage_window_title));
+			    	adb.setPositiveButton(getResources().getString(R.string.siteactivity_gotopage_button_go), listener);
+			        adb.setNegativeButton(getResources().getString(R.string.siteactivity_gotopage_button_cancel), listener);
+			    	adb.setView(pageNumber); 
+			    	adb.show();
+		    	}
+		    	else {
+		    		this.showErrorDialog(getResources().getString(R.string.siteactivity_gotopage_error_disabled));
+		    	}
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 
 	/* ************************************
