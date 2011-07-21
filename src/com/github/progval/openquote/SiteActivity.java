@@ -328,6 +328,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 					SiteActivity.this.addItem(item, false);
 				}
 				adapter.notifyDataSetChanged();
+				getListView().setSelectionAfterHeaderView();
 			}
 			else {
 				SiteActivity.this.showIOExceptionDialog();
