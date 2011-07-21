@@ -3,7 +3,6 @@
  */
 package com.github.progval.openquote.sites;
 // Project specific
-import android.util.Log;
 
 import com.github.progval.openquote.sites.BashItem;
 import com.github.progval.openquote.SiteActivity;
@@ -55,8 +54,6 @@ public class BashActivity extends SiteActivity {
 		String[] elements = document.select("td[valign=top]").html().split("</p> <p class=\"quote\">");
 		BashItem[] items = new BashItem[elements.length];
 		for (String element : elements) {
-			Log.i("OpenQuote", "--------------------------------------");
-			Log.i("OpenQuote", element);
 			items[foundItems] = new BashItem(Jsoup.parse(element));
 			foundItems++;
 		}
