@@ -28,7 +28,7 @@ public class DtcActivity extends SiteActivity {
 	}
 	public DtcItem[] getTop(int page) throws IOException {
 		if (page != this.getLowestPageNumber()) {
-			this.showErrorDialog("This site does not support this feature.");
+			this.showNonSupportedFeatureDialog();
 			this.page = this.getLowestPageNumber();
 			return new DtcItem[0];
 		}

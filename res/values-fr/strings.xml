@@ -30,4 +30,5 @@
     <string name="siteactivity_gotopage_error_disabled">Vous ne pouvez pas aller vers une page dans ce mode.</string>
     <string name="siteactivity_gotopage_button_go">Aller</string>
     <string name="siteactivity_gotopage_button_cancel">Annuler</string>
+    <string name="siteactivity_not_supported_error_message">Ce site ne supporte pas cette fonctionnalité.</string>
 </resources>

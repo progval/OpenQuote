@@ -237,6 +237,10 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	public void showIOExceptionDialog() {
 		this.showErrorDialog(getResources().getString(R.string.siteactivity_network_error_message));
 	}
+	/** Same as showErrorDialog() with a generic error message for not supported features */
+	public void showNonSupportedFeatureDialog() {
+		this.showErrorDialog(getResources().getString(R.string.siteactivity_not_supported_error_message));
+	}
 	/** Display an error dialog */
 	public void showErrorDialog(String message) {
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
