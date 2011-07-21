@@ -27,7 +27,7 @@
     <string name="siteactivity_share_window_title">Share</string>
     <string name="siteactivity_menu_gotopage">Go to page</string>
     <string name="siteactivity_gotopage_window_title">Go to page</string>
-    <string name="siteactivity_gotopage_error_disabled">You cannot got to a page in that mode.</string>
+    <string name="siteactivity_gotopage_error_disabled">You cannot go to a page in that mode.</string>
     <string name="siteactivity_gotopage_button_go">Go</string>
     <string name="siteactivity_gotopage_button_cancel">Cancel</string>
     <string name="siteactivity_not_supported_error_message">This website does not support this feature.</string>
