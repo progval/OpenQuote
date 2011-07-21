@@ -16,8 +16,9 @@ import org.jsoup.nodes.Element;
 public class VdmItem extends SiteItem {
 	public VdmItem(Element baseElement) {
         Element content = (Element) baseElement.child(0);
-    	this.id = baseElement.id();
+    	this.id = baseElement.id().replaceAll("[^0-9]", "");
     	this.content = content.text();
+    	this.content += id;
 	}
 	
 	public String toString() {

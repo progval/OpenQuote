@@ -20,6 +20,8 @@ public class PebkacItem extends SiteItem {
 	public PebkacItem(Element baseElement) {
 		String content = baseElement.html();
 
+		this.id = baseElement.select("a.permalink").attr("href").replaceAll("[^0-9]", "");
+
 		content = content.split("<br /><br /><a class=")[0];
 		Whitelist whiteList = Whitelist.none();
 		whiteList.addTags("br");
