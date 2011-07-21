@@ -18,7 +18,6 @@ public class VdmItem extends SiteItem {
         Element content = (Element) baseElement.child(0);
     	this.id = baseElement.id().replaceAll("[^0-9]", "");
     	this.content = content.text();
-    	this.content += id;
 	}
 	
 	public String toString() {
