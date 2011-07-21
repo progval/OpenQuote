@@ -17,15 +17,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.KeyEvent;
-import android.text.Editable;
-import android.util.Log;
 
 // Utils
 import java.io.IOException;
@@ -36,7 +31,6 @@ import java.lang.Void;
 import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
