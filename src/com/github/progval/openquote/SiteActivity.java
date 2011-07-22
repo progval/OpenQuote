@@ -57,6 +57,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	    LATEST, TOP, RANDOM
 	}
 	protected Mode mode;
+	protected int previouslyLoadedPage; // Restored if page load failed.
 	protected int page;
 	protected boolean enablePageChange = true;
 
@@ -78,6 +79,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		super.onCreate(savedInstanceState);
 
 		this.page = this.getLowestPageNumber();
+		this.previouslyLoadedPage = this.page;
 		this.setAdapter();
 		this.bindButtons();
 		this.initializeContextMenu();
@@ -332,10 +334,16 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 				}
 				adapter.notifyDataSetChanged();
 				getListView().setSelectionAfterHeaderView();
+				SiteActivity.this.previouslyLoadedPage = SiteActivity.this.page;
 			}
 			else {
 				SiteActivity.this.showIOExceptionDialog();
 			}
+			SiteActivity.this.page = SiteActivity.this.previouslyLoadedPage;
+			if (SiteActivity.this.page == SiteActivity.this.getLowestPageNumber()) {
+				findViewById(R.id.buttonPrevious).setEnabled(false); // We open the first page
+			}
+			SiteActivity.this.updateTitle();
 		}
 	}
 	/** Load the quotes, and add them to the ListView */
