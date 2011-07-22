@@ -134,6 +134,9 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 				this.refresh();
 				break;
 		}
+		if (this.page == this.getLowestPageNumber()) {
+			findViewById(R.id.buttonPrevious).setEnabled(false); // We open the first page
+		}
 	}
 	public void enablePageChange(boolean mode) {
 		findViewById(R.id.buttonPrevious).setEnabled(mode);
