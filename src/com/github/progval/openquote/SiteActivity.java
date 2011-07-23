@@ -64,9 +64,8 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	/* ************************************
 	 *  Storage
 	 *************************************/
-	private ArrayList<SiteItem> listItemsMetadata = new ArrayList<SiteItem>();
-	private ArrayList<String> listItems = new ArrayList<String>();
-	ArrayAdapter<String> adapter;
+	private ArrayList<SiteItem> listItems = new ArrayList<SiteItem>();
+	ItemAdapter adapter;
 
 
 
@@ -87,7 +86,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	}
 	private void setAdapter() {
 		setContentView(R.layout.siteactivity);
-		adapter=new ArrayAdapter<String>(this,
+		adapter=new ItemAdapter(this,
 				R.layout.siteitem,
 				listItems);
 		setListAdapter(adapter);
@@ -155,13 +154,13 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		switch (item.getItemId()) {
 			case R.id.siteactivity_context_copy:
 				ClipboardManager clipboard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
-				clipboard.setText(listItemsMetadata.get(clickedQuote).getContent());
+				clipboard.setText(listItems.get(clickedQuote).getContent());
 				return true;
 			case R.id.siteactivity_context_share:
 				Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
 				shareIntent.setType("text/plain");
 				shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.siteactivity_share_subject));
-				shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, listItemsMetadata.get(clickedQuote).getContent());
+				shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, listItems.get(clickedQuote).getContent());
 
 				startActivity(Intent.createChooser(shareIntent, getResources().getString(R.string.siteactivity_share_window_title)));
 		}
@@ -354,12 +353,10 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	/** Add an item to the list */
 	private void addItem(SiteItem item, boolean top) {
 		if (top) {
-			listItemsMetadata.add(0, item);
-			listItems.add(0, item.toString());
+			listItems.add(0, item);
 		}
 		else {
-			listItemsMetadata.add( item);
-			listItems.add(item.toString());
+			listItems.add( item);
 		}
 		adapter.notifyDataSetChanged();
 	}
