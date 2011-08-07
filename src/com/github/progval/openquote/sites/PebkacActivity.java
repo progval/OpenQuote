@@ -3,18 +3,14 @@
  */
 package com.github.progval.openquote.sites;
 
-// Project specific
-import com.github.progval.openquote.sites.PebkacItem;
 import com.github.progval.openquote.SiteActivity;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
-//Networking
 import java.io.IOException;
 
-//Parsing HTML
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-import org.jsoup.nodes.Element;
-import org.jsoup.Jsoup;
 
 /**
  * @author ProgVal
@@ -30,7 +26,7 @@ public class PebkacActivity extends SiteActivity {
 	public PebkacItem[] getTop(int page) throws IOException {
 		return this.parsePage("/index.php?p=top&page=" + String.valueOf(page));
 	}
-	public PebkacItem[] getRandom(int page) throws IOException {
+	public PebkacItem[] getRandom() throws IOException {
 		return this.parsePage("/pebkac-aleatoires.html");
 	}
 	public PebkacItem[] parsePage(String uri) throws IOException {

@@ -2,17 +2,12 @@
  * 
  */
 package com.github.progval.openquote.sites;
-// Project specific
 
-import com.github.progval.openquote.sites.BashItem;
 import com.github.progval.openquote.SiteActivity;
-
-//Networking
-import java.io.IOException;
-
-//Parsing HTML
-import org.jsoup.nodes.Document;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import java.io.IOException;
 
 /**
  * @author ProgVal
@@ -44,7 +39,7 @@ public class BashActivity extends SiteActivity {
 			return this.parsePage("?top");
 		}
 	}
-	public BashItem[] getRandom(int page) throws IOException {
+	public BashItem[] getRandom() throws IOException {
 		enablePageChange(false);
 		return this.parsePage("?random");
 	}

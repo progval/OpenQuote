@@ -2,18 +2,14 @@
  * 
  */
 package com.github.progval.openquote.sites;
-// Project specific
-import com.github.progval.openquote.sites.DtcItem;
+
 import com.github.progval.openquote.SiteActivity;
-
-//Networking
-import java.io.IOException;
-
-//Parsing HTML
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-import org.jsoup.nodes.Element;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 
 /**
  * @author ProgVal
@@ -36,7 +32,7 @@ public class DtcActivity extends SiteActivity {
 			return this.parsePage("/top50.html");
 		}
 	}
-	public DtcItem[] getRandom(int page) throws IOException {
+	public DtcItem[] getRandom() throws IOException {
 		return this.parsePage("/random.html");
 	}
 	public DtcItem[] parsePage(String uri) throws IOException {

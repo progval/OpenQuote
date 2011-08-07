@@ -3,20 +3,16 @@
  */
 package com.github.progval.openquote.sites;
 
-// Project specific
 import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.github.progval.openquote.R;
 import com.github.progval.openquote.SiteItem;
-
-// Parsing HTML
-import org.jsoup.nodes.TextNode;
-import org.jsoup.nodes.Element;
-import org.jsoup.safety.Whitelist;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.TextNode;
+import org.jsoup.safety.Whitelist;
 
 
 /**

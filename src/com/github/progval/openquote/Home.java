@@ -1,27 +1,17 @@
 package com.github.progval.openquote;
 
-// Project specifics
-import com.github.progval.openquote.sites.PebkacActivity;
-import com.github.progval.openquote.sites.BashActivity;
-import com.github.progval.openquote.sites.VdmActivity;
-import com.github.progval.openquote.sites.DtcActivity;
-
-// User interface
-import android.view.View.OnClickListener;
-import android.content.Intent;
-import android.widget.Button;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-// Android
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.*;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import com.github.progval.openquote.sites.BashActivity;
+import com.github.progval.openquote.sites.DtcActivity;
+import com.github.progval.openquote.sites.PebkacActivity;
+import com.github.progval.openquote.sites.VdmActivity;
 
 /**
  * Home screen.
@@ -29,7 +19,7 @@ import android.os.Bundle;
  * @author ProgVal
  */
 public class Home extends Activity {
-    /** Called when the activity is first created. */
+	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,13 +60,13 @@ public class Home extends Activity {
 	};
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.home, menu);
-	    return true;
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.home, menu);
+		return true;
 	}
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-		    case R.id.home_menu_about:
+		switch (item.getItemId()) {
+			case R.id.home_menu_about:
 				LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
 				View layout = inflater.inflate(R.layout.about, (ViewGroup) findViewById(R.id.home_menu_about));
 				Builder adb = new AlertDialog.Builder(this);

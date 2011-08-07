@@ -3,40 +3,26 @@
  */
 package com.github.progval.openquote;
 
-// Project specific
-import com.github.progval.openquote.SiteItem;
-
-// User interface
-import android.text.ClipboardManager;
-import android.text.InputType;
-import android.text.method.NumberKeyListener;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-// Utils
-import java.io.IOException;
-import java.util.ArrayList;
-import java.lang.Void;
-
-// Android
-import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.ClipboardManager;
+import android.text.InputType;
+import android.text.method.NumberKeyListener;
+import android.view.*;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Abstract class for a source site.
@@ -57,13 +43,20 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	/* ************************************
 	 *  State
 	 *************************************/
+
+	/**
+	 * A mode of a quotes activity.
+	 */
 	public enum Mode {
-	    LATEST, TOP, RANDOM
+		LATEST, TOP, RANDOM
 	}
 	protected Mode previouslyLoadedMode = Mode.LATEST; // Restored if page load failed.
 	protected Mode mode = Mode.LATEST;
 	protected int previouslyLoadedPage; // Restored if page load failed.
 	protected int page;
+	/**
+	 * Determinates whether or not the user is allowed to use the previous/next button.
+	 */
 	protected boolean enablePageChange = true;
 
 	/* ************************************
@@ -89,6 +82,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		this.initializeContextMenu();
 		this.onClick(findViewById(R.id.buttonLatest));
 	}
+	// Called only be the constructor.
 	private void setAdapter() {
 		setContentView(R.layout.siteactivity);
 		adapter=new ItemAdapter(this,
@@ -96,7 +90,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 				listItems);
 		setListAdapter(adapter);
 	}
-	/** Set onClickListener for the buttons */
+	// Called only be the constructor.
 	private void bindButtons() {
 		findViewById(R.id.buttonLatest).setOnClickListener(this);
 		findViewById(R.id.buttonTop).setOnClickListener(this);
@@ -104,12 +98,16 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		findViewById(R.id.buttonPrevious).setOnClickListener(this);
 		findViewById(R.id.buttonNext).setOnClickListener(this);
 	}
-	/** Initialize the context menu. */
+	// Called only be the constructor.
 	private void initializeContextMenu() {
 		ListView listView = getListView();
 		registerForContextMenu(listView);
 	}
-	/** Called when any button (not in a Dialog) is clicked. */
+	/**
+	 * Called when any button (not in a Dialog) is clicked.
+	 *
+	 * @param v The clicked view.
+	 */
 	public void onClick(View v) {
 		enablePageChange(true);
 		switch (v.getId()) {
@@ -144,6 +142,12 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 			findViewById(R.id.buttonPrevious).setEnabled(false); // We open the first page
 		}
 	}
+
+	/**
+	 * Sets the 'enablePageChange' flag to the given mode and enable/disable the buttons according to this mode.
+	 *
+	 * @param mode The new mode to be set.
+	 */
 	public void enablePageChange(boolean mode) {
 		findViewById(R.id.buttonPrevious).setEnabled(mode);
 		findViewById(R.id.buttonNext).setEnabled(mode);
@@ -180,6 +184,12 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	/* ************************************
 	 *  Full quote display
 	 *************************************/
+
+	/**
+	 * Open a dialog and display the given quote.
+	 *
+	 * @param quote The quote to be fully displayed.
+	 */
 	protected void displayFullQuote(SiteItem quote) {
 		AlertDialog.Builder adb;
 		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -199,10 +209,17 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	 *  Context menu
 	 *************************************/
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.siteactivity, menu);
-	    return true;
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.siteactivity, menu);
+		return true;
 	}
+
+	/**
+	 * Extract the page number from the given EditText instance, set it to the current page if valid, refreshes the page, and dismiss the dialog.
+	 *
+	 * @param dialog The dialog to be dismissed.
+	 * @param pageNumber The EditText where the user entered the page number.
+	 */
 	void validateDialog(DialogInterface dialog, EditText pageNumber)  {
 		try {
 			page = Integer.parseInt(pageNumber.getText().toString()) - 1 + SiteActivity.this.getLowestPageNumber();
@@ -212,27 +229,27 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		catch (NumberFormatException e) {
 			// Never trust user input
 		}
-	};
+	}
+
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-		    case R.id.siteactivity_menu_gotopage:
-		    	if (enablePageChange) {
-		    		// Create TextEdit
-			    	final EditText pageNumber = new EditText(this);
-			    	pageNumber.setKeyListener(new NumberKeyListener(){
-			    		    @Override
-			    		    protected char[] getAcceptedChars() {
-			    		        char[] numberChars = {'1','2','3','4','5','6','7','8','9','0'}; // No dots.
-			    		        return numberChars;
-			    		    }
+		switch (item.getItemId()) {
+			case R.id.siteactivity_menu_gotopage:
+				if (enablePageChange) {
+					// Create TextEdit
+					final EditText pageNumber = new EditText(this);
+					pageNumber.setKeyListener(new NumberKeyListener(){
+							@Override
+							protected char[] getAcceptedChars() {
+								return new char[]{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
+							}
 	
 						public int getInputType() {
 							return InputType.TYPE_CLASS_NUMBER; // Set keyboard to numeric mode.
 						}
-			    		});
-			    	
-			    	// Create listener
-			    	DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+						});
+
+					// Create listener
+					DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
 							switch (which) {
 								case DialogInterface.BUTTON_POSITIVE:
@@ -243,19 +260,19 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 									break;
 							}
 						}
-			    	};
-			    	
-			    	// Build dialog
-			    	AlertDialog.Builder adb = new AlertDialog.Builder(this);
-			    	adb.setTitle(getResources().getString(R.string.siteactivity_gotopage_window_title));
-			    	adb.setPositiveButton(getResources().getString(R.string.siteactivity_gotopage_button_go), listener);
-			        adb.setNegativeButton(getResources().getString(R.string.siteactivity_gotopage_button_cancel), listener);
-			    	adb.setView(pageNumber); 
-			    	adb.show();
-		    	}
-		    	else {
-		    		this.showErrorDialog(getResources().getString(R.string.siteactivity_gotopage_error_disabled));
-		    	}
+					};
+
+					// Build dialog
+					AlertDialog.Builder adb = new AlertDialog.Builder(this);
+					adb.setTitle(getResources().getString(R.string.siteactivity_gotopage_window_title));
+					adb.setPositiveButton(getResources().getString(R.string.siteactivity_gotopage_button_go), listener);
+					adb.setNegativeButton(getResources().getString(R.string.siteactivity_gotopage_button_cancel), listener);
+					adb.setView(pageNumber);
+					adb.show();
+				}
+				else {
+					this.showErrorDialog(getResources().getString(R.string.siteactivity_gotopage_error_disabled));
+				}
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -273,7 +290,11 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	public void showNonSupportedFeatureDialog() {
 		this.showErrorDialog(getResources().getString(R.string.siteactivity_not_supported_error_message));
 	}
-	/** Display an error dialog */
+	/**
+	 * Display an error dialog
+	 *
+	 * @param message The error message that will be displayed.
+	 */
 	public void showErrorDialog(String message) {
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
 		adb.setTitle(getResources().getString(R.string.siteactivity_error_title));
@@ -285,6 +306,13 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	/* ************************************
 	 *  Fetch quotes
 	 *************************************/
+
+	/**
+	 * Get the quotes for the current mode and page.
+	 *
+	 * @return An array of the quotes.
+	 * @throws IOException If something bad occurred with the network.
+	 */
 	private SiteItem[] getQuotes() throws IOException {
 		switch(this.mode) {
 			case LATEST:
@@ -292,32 +320,41 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 			case TOP:
 				return this.getTop(this.page);
 			case RANDOM:
-				return this.getRandom(this.page);
+				return this.getRandom();
 		}
 		return new SiteItem[0];
 	}
-	/** Populate the activity interface with latest quotes */
-	public SiteItem[] getLatest() throws IOException {
-		return this.getLatest(this.getLowestPageNumber());
-	}
-	/** Populate the activity interface with the n-th page of latest quotes */
+	/**
+	 * Returns the latest quotes
+	 *
+	 * @param page The number of the page that will be loaded.
+	 * @return An array containing the latest quotes.
+	 * @throws IOException If something bad occurred with the network.
+	 */
 	public abstract SiteItem[] getLatest(int page) throws IOException;
-	/** Populate the activity interface with top quotes */
-	public SiteItem[] getTop() throws IOException {
-		return this.getTop(this.getLowestPageNumber());
-	}
-	/** Populate the activity interface with the n-th page of top quotes */
+	/**
+	 * Returns the top quotes
+	 *
+	 * @param page The number of the page that will be loaded.
+	 * @return An array containing the top quotes.
+	 * @throws IOException If something bad occurred with the network.
+	 */
 	public abstract SiteItem[] getTop(int page) throws IOException;
-	/** Populate the activity interface with random quotes */
-	public SiteItem[] getRandom() throws IOException {
-		return this.getRandom(this.getLowestPageNumber());
-	}
-	/** Populate the activity interface with the n-th page of random quotes */
-	public abstract SiteItem[] getRandom(int page) throws IOException;
+	/**
+	 * Returns random quotes
+	 *
+	 * @return An array containing random quotes.
+	 * @throws IOException If something bad occurred with the network.
+	 */
+	public abstract SiteItem[] getRandom() throws IOException;
 
 	/* ************************************
 	 *  Display quotes
 	 *************************************/
+
+	/**
+	 * Download and extract the quotes while displaying a ProgressDialog, and then dismiss the dialog and populate the current activity.
+	 */
 	private class AsyncQuotesFetcher extends AsyncTask<Void, Void, Void> {
 		private SiteItem[] items;
 		private String errorLog;
@@ -384,22 +421,31 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 			SiteActivity.this.updateTitle();
 		}
 	}
-	/** Load the quotes, and add them to the ListView */
+	/** Load the quotes asynchronously, and add them to the ListView */
 	public void refresh() {
 		this.updateTitle();
 		new AsyncQuotesFetcher(this).execute();
 	}
-	/** Add an item to the list */
+	/**
+	 * Add an item to the list
+	 *
+	 * @param item The item to be added to the list
+	 * @param top If the item will be prepended to the list instead of appended.
+	 */
 	private void addItem(SiteItem item, boolean top) {
 		if (top) {
 			listItems.add(0, item);
 		}
 		else {
-			listItems.add( item);
+			listItems.add(item);
 		}
 		adapter.notifyDataSetChanged();
 	}
-	/** Prepend an item to the list */
+	/**
+	 * Alias for addItem(item, true).
+	 *
+	 * @param item The item to be added to the list
+	 */
 	public void addItem(SiteItem item) {
 		addItem(item, true);
 	}
@@ -417,7 +463,11 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		int humanReadablePage = page - this.getLowestPageNumber() + 1;
 		setTitle(String.format(getResources().getString(R.string.siteactivity_title), this.getName(), this.getModeString(), humanReadablePage));
 	}
-	/** Returns the mode in the current locale */
+	/**
+	 * Returns the mode in the current locale
+	 *
+	 * @return A human-readable string that represents the mode.
+	 */
 	public String getModeString() {
 		switch (this.mode) {
 			case LATEST:
