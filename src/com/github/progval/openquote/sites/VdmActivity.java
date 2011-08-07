@@ -22,16 +22,16 @@ public class VdmActivity extends SiteActivity {
 	public String getName() { return "VDM"; }
 	public int getLowestPageNumber() { return 0; }
 
-	public VdmItem[] getLatest(int page) throws IOException {
-		return this.parsePage("/?page=" + String.valueOf(page));
+	public VdmItem[] getLatest(AsyncQuotesFetcher task, int page) throws IOException {
+		return this.parsePage(task, "/?page=" + String.valueOf(page));
 	}
-	public VdmItem[] getTop(int page) throws IOException {
-		return this.parsePage("/tops?page=" + String.valueOf(page));
+	public VdmItem[] getTop(AsyncQuotesFetcher task, int page) throws IOException {
+		return this.parsePage(task, "/tops?page=" + String.valueOf(page));
 	}
-	public VdmItem[] getRandom(int page) throws IOException {
-		return this.parsePage("/aleatoire");
+	public VdmItem[] getRandom(AsyncQuotesFetcher task) throws IOException {
+		return this.parsePage(task, "/aleatoire");
 	}
-	public VdmItem[] parsePage(String uri) throws IOException {
+	public VdmItem[] parsePage(AsyncQuotesFetcher task, String uri) throws IOException {
 		int foundItems = 0;
 		Document document = Jsoup.connect("http://m.viedemerde.fr" + uri).get();
 		
@@ -41,6 +41,9 @@ public class VdmActivity extends SiteActivity {
 		Elements elements = document.select("ul.content li:contains(VDM)");
 		VdmItem[] items = new VdmItem[elements.size()];
 		for (Element element : elements) {
+			if (task.isCancelled()) {
+				return new VdmItem[0];
+			}
 			items[foundItems] = new VdmItem(element);
 			foundItems++;
 		}

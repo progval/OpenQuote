@@ -24,21 +24,24 @@ public class PebkacActivity extends SiteActivity {
 	public String getName() { return "PEBKAC"; }
 	public int getLowestPageNumber() { return 1; }
 
-	public PebkacItem[] getLatest(int page) throws IOException {
-		return this.parsePage("/index.php?page=" + String.valueOf(page));
+	public PebkacItem[] getLatest(AsyncQuotesFetcher task, int page) throws IOException {
+		return this.parsePage(task, "/index.php?page=" + String.valueOf(page));
 	}
-	public PebkacItem[] getTop(int page) throws IOException {
-		return this.parsePage("/index.php?p=top&page=" + String.valueOf(page));
+	public PebkacItem[] getTop(AsyncQuotesFetcher task, int page) throws IOException {
+		return this.parsePage(task, "/index.php?p=top&page=" + String.valueOf(page));
 	}
-	public PebkacItem[] getRandom(int page) throws IOException {
-		return this.parsePage("/pebkac-aleatoires.html");
+	public PebkacItem[] getRandom(AsyncQuotesFetcher task) throws IOException {
+		return this.parsePage(task, "/pebkac-aleatoires.html");
 	}
-	public PebkacItem[] parsePage(String uri) throws IOException {
+	public PebkacItem[] parsePage(AsyncQuotesFetcher task, String uri) throws IOException {
 		int foundItems = 0;
 		Document document = Jsoup.connect("http://www.pebkac.fr" + uri).get();
 		Elements elements = document.select("td.pebkacContent");
 		PebkacItem[] items = new PebkacItem[elements.size()];
 		for (Element element : elements) {
+			if (task.isCancelled()) {
+				return new PebkacItem[0];
+			}
 			items[foundItems] = new PebkacItem(element);
 			foundItems++;
 		}

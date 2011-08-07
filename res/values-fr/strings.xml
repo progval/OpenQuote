@@ -3,6 +3,7 @@
     <string name="app_name">OpenQuote</string>
     <string name="siteactivity_network_error">Les citations n\'ont pû être récupérées à cause d\'une erreur réseau.</string>
     <string name="siteactivity_loading_quotes">Chargement des citations. Veuillez patienter...</string>
+    <string name="siteactivity_download_cancelled">Téléchargement annulé.</string>
     <string name="siteactivity_unknown_error">Erreur inconnue : %s</string>
     <string name="siteactivity_no_errors_no_results">C\'est étrange... il n\'y a pas de résultat, mais pas non plus d\'erreur.</string>
     <string name="siteactivity_title">%1$s &gt; %2$s &gt; page %3$s</string>
