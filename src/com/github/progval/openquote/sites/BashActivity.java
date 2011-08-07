@@ -54,9 +54,6 @@ public class BashActivity extends SiteActivity {
 		String[] elements = document.select("td[valign=top]").html().split("</p> <p class=\"quote\">");
 		BashItem[] items = new BashItem[elements.length];
 		for (String element : elements) {
-			if (task.isCancelled()) {
-				return new BashItem[0];
-			}
 			if (foundItems != 0) {
 				element = "<p class=\"quote\">" + element;
 			}

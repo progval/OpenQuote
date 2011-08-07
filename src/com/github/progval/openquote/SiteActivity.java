@@ -323,6 +323,14 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		private String errorLog;
 		ProgressDialog dialog;
 		SiteActivity activity;
+		private void dismissDialog() {
+			try {
+				dialog.dismiss();
+			}
+			catch (IllegalArgumentException e) {
+				// Window has leaked
+			}
+		}
 		
 		public AsyncQuotesFetcher(SiteActivity activity) {
 			super();
@@ -349,10 +357,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		}
 		protected void onPostExecute(Void foo) {
 			dismissDialog();
-			if (this.isCancelled()) {
-				activity.showErrorDialog(String.format(getResources().getString(R.string.siteactivity_download_cancelled), errorLog));
-			}
-			else if (errorLog != null) {
+			if (errorLog != null) {
 				activity.showErrorDialog(String.format(getResources().getString(R.string.siteactivity_unknown_error), errorLog));
 			}
 			else if (items == null) {
