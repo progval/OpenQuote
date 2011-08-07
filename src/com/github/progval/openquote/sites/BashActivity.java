@@ -56,6 +56,7 @@ public class BashActivity extends SiteActivity {
 		for (String element : elements) {
 			if (task.isCancelled()) {
 				return new BashItem[0];
+			}
 			if (foundItems != 0) {
 				element = "<p class=\"quote\">" + element;
 			}
