@@ -22,7 +22,7 @@ public class BashActivity extends SiteActivity {
 	public String getName() { return "Bash.org"; }
 	public int getLowestPageNumber() { return 1; }
 
-	public BashItem[] getLatest(AsyncQuotesFetcher task, int page) throws IOException {
+	public BashItem[] getLatest(int page) throws IOException {
 		enablePageChange(false);
 		if (page != this.getLowestPageNumber()) {
 			this.showNonSupportedFeatureDialog();
@@ -30,10 +30,10 @@ public class BashActivity extends SiteActivity {
 			return new BashItem[0];
 		}
 		else {
-			return this.parsePage(task, "/?latest");
+			return this.parsePage("/?latest");
 		}
 	}
-	public BashItem[] getTop(AsyncQuotesFetcher task, int page) throws IOException {
+	public BashItem[] getTop(int page) throws IOException {
 		enablePageChange(false);
 		if (page != this.getLowestPageNumber()) {
 			this.showNonSupportedFeatureDialog();
@@ -41,14 +41,14 @@ public class BashActivity extends SiteActivity {
 			return new BashItem[0];
 		}
 		else {
-			return this.parsePage(task, "?top");
+			return this.parsePage("?top");
 		}
 	}
-	public BashItem[] getRandom(AsyncQuotesFetcher task) throws IOException {
+	public BashItem[] getRandom(int page) throws IOException {
 		enablePageChange(false);
-		return this.parsePage(task, "?random");
+		return this.parsePage("?random");
 	}
-	public BashItem[] parsePage(AsyncQuotesFetcher task, String uri) throws IOException {
+	public BashItem[] parsePage(String uri) throws IOException {
 		int foundItems = 0;
 		Document document = Jsoup.connect("http://bash.org" + uri).get();
 		String[] elements = document.select("td[valign=top]").html().split("</p> <p class=\"quote\">");

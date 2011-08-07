@@ -3,7 +3,6 @@
     <string name="app_name">OpenQuote</string>
     <string name="siteactivity_network_error_message">The quotes could not be loaded due to a network issue.</string>
     <string name="siteactivity_loading_quotes">Loading the quotes. Please wait...</string>
-    <string name="siteactivity_download_cancelled">Download cancelled.</string>
     <string name="siteactivity_unknown_error">Unknown error: %s</string>
     <string name="siteactivity_no_errors_no_results">This is strange... there is no results, but this is not an error.</string>
     <string name="siteactivity_title">%1$s &gt; %2$s &gt; page %3$s</string>
