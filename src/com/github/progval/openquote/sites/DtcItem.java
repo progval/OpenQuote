@@ -29,7 +29,7 @@ public class DtcItem extends SiteItem {
 	private int negativeRatings;
 	
 	public DtcItem(Element baseElement) {
-		this.id = ((Node) baseElement).attr("href").replaceAll("[^0-9]", "");
+		this.id = ((Node) baseElement.select("p a").get(0)).attr("href").replaceAll("[^0-9]", "");
 		html = baseElement.html();
 		
 		Whitelist whiteList = Whitelist.none();
