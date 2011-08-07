@@ -58,6 +58,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	public enum Mode {
 	    LATEST, TOP, RANDOM
 	}
+	protected Mode previouslyLoadedMode; // Restored if page load failed.
 	protected Mode mode;
 	protected int previouslyLoadedPage; // Restored if page load failed.
 	protected int page;
@@ -282,51 +283,56 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	/* ************************************
 	 *  Fetch quotes
 	 *************************************/
-	private SiteItem[] getQuotes() throws IOException {
+	private SiteItem[] getQuotes(AsyncQuotesFetcher task) throws IOException {
 		switch(this.mode) {
 			case LATEST:
-				return this.getLatest(this.page);
+				return this.getLatest(task, this.page);
 			case TOP:
-				return this.getTop(this.page);
+				return this.getTop(task, this.page);
 			case RANDOM:
-				return this.getRandom(this.page);
+				return this.getRandom(task);
 		}
 		return new SiteItem[0];
 	}
 	/** Populate the activity interface with latest quotes */
-	public SiteItem[] getLatest() throws IOException {
-		return this.getLatest(this.getLowestPageNumber());
-	}
-	/** Populate the activity interface with the n-th page of latest quotes */
-	public abstract SiteItem[] getLatest(int page) throws IOException;
+	public abstract SiteItem[] getLatest(AsyncQuotesFetcher task, int page) throws IOException;
 	/** Populate the activity interface with top quotes */
-	public SiteItem[] getTop() throws IOException {
-		return this.getTop(this.getLowestPageNumber());
-	}
-	/** Populate the activity interface with the n-th page of top quotes */
-	public abstract SiteItem[] getTop(int page) throws IOException;
+	public abstract SiteItem[] getTop(AsyncQuotesFetcher task, int page) throws IOException;
 	/** Populate the activity interface with random quotes */
-	public SiteItem[] getRandom() throws IOException {
-		return this.getRandom(this.getLowestPageNumber());
-	}
-	/** Populate the activity interface with the n-th page of random quotes */
-	public abstract SiteItem[] getRandom(int page) throws IOException;
+	public abstract SiteItem[] getRandom(AsyncQuotesFetcher task) throws IOException;
 
 	/* ************************************
 	 *  Display quotes
 	 *************************************/
-	private class AsyncQuotesFetcher extends AsyncTask<Void, Void, Void> {
+	public class AsyncQuotesFetcher extends AsyncTask<Void, Void, Void>{
 		private SiteItem[] items;
 		private String errorLog;
 		ProgressDialog dialog;
 
+		private void dismissDialog() {
+			try {
+				dialog.dismiss();
+			}
+			catch (IllegalArgumentException e) {
+				// Window has leaked
+			}
+		}
+
 		protected void onPreExecute() {
 			dialog = ProgressDialog.show(SiteActivity.this, "", getResources().getString(R.string.siteactivity_loading_quotes), true);
+			dialog.setOnDismissListener(new DialogInterface.OnDismissListener(){
+                public void onDismiss(DialogInterface dialog) {
+                	AsyncQuotesFetcher.this.cancel(true);
+                	dismissDialog();
+        			AsyncQuotesFetcher.this.finalize();
+                    finish();
+                }
+            });
 		}
 
 		protected Void doInBackground(Void... foo) {
 			try {
-				items = SiteActivity.this.getQuotes();
+				items = SiteActivity.this.getQuotes(this);
 			}
 			catch (Exception e) {
 				if (e instanceof IOException) {
@@ -339,13 +345,11 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 			return null;
 		}
 		protected void onPostExecute(Void foo) {
-			try {
-				dialog.dismiss();
+			dismissDialog();
+			if (this.isCancelled()) {
+				SiteActivity.this.showErrorDialog(String.format(getResources().getString(R.string.siteactivity_download_cancelled), errorLog));
 			}
-			catch (IllegalArgumentException e) {
-				// Window has leaked
-			}
-			if (errorLog != null) {
+			else if (errorLog != null) {
 				SiteActivity.this.showErrorDialog(String.format(getResources().getString(R.string.siteactivity_unknown_error), errorLog));
 			}
 			else if (items == null) {
@@ -358,12 +362,18 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 				}
 				adapter.notifyDataSetChanged();
 				getListView().setSelectionAfterHeaderView();
+				SiteActivity.this.previouslyLoadedMode = SiteActivity.this.mode;
 				SiteActivity.this.previouslyLoadedPage = SiteActivity.this.page;
 			}
 			else {
 				SiteActivity.this.showIOExceptionDialog();
 			}
+			finalize();
+		}
+
+		public void finalize() {
 			SiteActivity.this.page = SiteActivity.this.previouslyLoadedPage;
+			SiteActivity.this.mode = SiteActivity.this.previouslyLoadedMode;
 			if (SiteActivity.this.page == SiteActivity.this.getLowestPageNumber()) {
 				findViewById(R.id.buttonPrevious).setEnabled(false); // We open the first page
 			}
