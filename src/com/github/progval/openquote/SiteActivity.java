@@ -12,15 +12,17 @@ import android.text.InputType;
 import android.text.method.NumberKeyListener;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 // Utils
 import java.io.IOException;
@@ -150,21 +152,44 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		inflater.inflate(R.menu.quote_context_menu, menu);
 	}
 	public boolean onContextItemSelected(MenuItem item) {
-		int clickedQuote = ((AdapterContextMenuInfo)item.getMenuInfo()).position;
+		int clickedQuotePosition = ((AdapterContextMenuInfo)item.getMenuInfo()).position;
+		SiteItem clickedQuote = listItems.get(clickedQuotePosition);
 		switch (item.getItemId()) {
 			case R.id.siteactivity_context_copy:
 				ClipboardManager clipboard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
-				clipboard.setText(listItems.get(clickedQuote).getContent());
+				clipboard.setText(clickedQuote.getContent());
 				return true;
 			case R.id.siteactivity_context_share:
 				Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
 				shareIntent.setType("text/plain");
 				shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.siteactivity_share_subject));
-				shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, listItems.get(clickedQuote).getContent());
+				shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, clickedQuote.getContent());
 
 				startActivity(Intent.createChooser(shareIntent, getResources().getString(R.string.siteactivity_share_window_title)));
+				return true;
+			case R.id.siteactivity_context_fulldisplay:
+				this.displayFullQuote(clickedQuote);
+				return true;
 		}
 		return false;
+	}
+
+	/* ************************************
+	 *  Full quote display
+	 *************************************/
+	protected void displayFullQuote(SiteItem quote) {
+		AlertDialog.Builder adb;
+		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(R.layout.full_quote_display, (ViewGroup) findViewById(R.id.full_quote_display));
+
+		((TextView) layout.findViewById(R.id.fullquote_content)).setText(quote.getContent());
+		quote.addRatingView(this, layout.findViewById(R.id.full_quote_display));
+
+		adb = new AlertDialog.Builder(this);
+		adb.setView(layout);
+		adb.setTitle(String.format(getResources().getString(R.string.fullquote_title), quote.getId()));
+		adb.create();
+		adb.show();
 	}
 
 	/* ************************************

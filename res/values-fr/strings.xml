@@ -31,4 +31,6 @@
     <string name="siteactivity_gotopage_button_go">Aller</string>
     <string name="siteactivity_gotopage_button_cancel">Annuler</string>
     <string name="siteactivity_not_supported_error_message">Ce site ne supporte pas cette fonctionnalité.</string>
+    <string name="siteactivity_context_fulldisplay">Plus d\'informations</string>
+    <string name="fullquote_title">Citation #%s</string>
 </resources>

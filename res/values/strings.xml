@@ -31,4 +31,6 @@
     <string name="siteactivity_gotopage_button_go">Go</string>
     <string name="siteactivity_gotopage_button_cancel">Cancel</string>
     <string name="siteactivity_not_supported_error_message">This website does not support this feature.</string>
+    <string name="siteactivity_context_fulldisplay">More info</string>
+    <string name="fullquote_title">Quote #%s</string>
 </resources>

@@ -42,7 +42,7 @@ public class DtcActivity extends SiteActivity {
 	public DtcItem[] parsePage(String uri) throws IOException {
 		int foundItems = 0;
 		Document document = Jsoup.connect("http://danstonchat.com" + uri).get();
-		Elements elements = document.select("p.item-content a");
+		Elements elements = document.select("div.item");
 		DtcItem[] items = new DtcItem[elements.size()];
 		for (Element element : elements) {
 			items[foundItems] = new DtcItem(element);
