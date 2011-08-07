@@ -46,6 +46,8 @@ import android.os.Bundle;
  */
 
 public abstract class SiteActivity extends ListActivity implements OnClickListener {
+	public static final String PREFS_NAME = "preferences";
+	
 	/* *******************************
 	 *  Site-specific data
 	 ********************************/
@@ -308,6 +310,12 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		private SiteItem[] items;
 		private String errorLog;
 		ProgressDialog dialog;
+		SiteActivity activity;
+		
+		public AsyncQuotesFetcher(SiteActivity activity) {
+			super();
+			this.activity = activity;
+		}
 
 		private void dismissDialog() {
 			try {
@@ -332,7 +340,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 
 		protected Void doInBackground(Void... foo) {
 			try {
-				items = SiteActivity.this.getQuotes(this);
+				items = activity.getQuotes(this);
 			}
 			catch (Exception e) {
 				if (e instanceof IOException) {
@@ -347,26 +355,26 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		protected void onPostExecute(Void foo) {
 			dismissDialog();
 			if (this.isCancelled()) {
-				SiteActivity.this.showErrorDialog(String.format(getResources().getString(R.string.siteactivity_download_cancelled), errorLog));
+				activity.showErrorDialog(String.format(getResources().getString(R.string.siteactivity_download_cancelled), errorLog));
 			}
 			else if (errorLog != null) {
-				SiteActivity.this.showErrorDialog(String.format(getResources().getString(R.string.siteactivity_unknown_error), errorLog));
+				activity.showErrorDialog(String.format(getResources().getString(R.string.siteactivity_unknown_error), errorLog));
 			}
 			else if (items == null) {
-				SiteActivity.this.showErrorDialog(getResources().getString(R.string.siteactivity_no_errors_no_results));
+				activity.showErrorDialog(getResources().getString(R.string.siteactivity_no_errors_no_results));
 			}
 			else if (items.length > 0) {
-				SiteActivity.this.clearList();
+				activity.clearList();
 				for (SiteItem item : items) {
-					SiteActivity.this.addItem(item, false);
+					activity.addItem(item, false);
 				}
 				adapter.notifyDataSetChanged();
 				getListView().setSelectionAfterHeaderView();
-				SiteActivity.this.previouslyLoadedMode = SiteActivity.this.mode;
-				SiteActivity.this.previouslyLoadedPage = SiteActivity.this.page;
+				activity.previouslyLoadedMode = activity.mode;
+				activity.previouslyLoadedPage = activity.page;
 			}
 			else {
-				SiteActivity.this.showIOExceptionDialog();
+				activity.showIOExceptionDialog();
 			}
 			finalize();
 		}
@@ -383,7 +391,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	/** Load the quotes, and add them to the ListView */
 	public void refresh() {
 		this.updateTitle();
-		new AsyncQuotesFetcher().execute();
+		new AsyncQuotesFetcher(this).execute();
 	}
 	/** Add an item to the list */
 	private void addItem(SiteItem item, boolean top) {
