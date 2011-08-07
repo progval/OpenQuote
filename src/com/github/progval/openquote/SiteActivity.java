@@ -56,6 +56,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	public enum Mode {
 	    LATEST, TOP, RANDOM
 	}
+	protected Mode previouslyLoadedMode; // Restored if page load failed.
 	protected Mode mode;
 	protected int previouslyLoadedPage; // Restored if page load failed.
 	protected int page;
@@ -334,12 +335,14 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 				}
 				adapter.notifyDataSetChanged();
 				getListView().setSelectionAfterHeaderView();
+				SiteActivity.this.previouslyLoadedMode = SiteActivity.this.mode;
 				SiteActivity.this.previouslyLoadedPage = SiteActivity.this.page;
 			}
 			else {
 				SiteActivity.this.showIOExceptionDialog();
 			}
 			SiteActivity.this.page = SiteActivity.this.previouslyLoadedPage;
+			SiteActivity.this.mode = SiteActivity.this.previouslyLoadedMode;
 			if (SiteActivity.this.page == SiteActivity.this.getLowestPageNumber()) {
 				findViewById(R.id.buttonPrevious).setEnabled(false); // We open the first page
 			}
