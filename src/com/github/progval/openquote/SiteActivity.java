@@ -56,8 +56,8 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	public enum Mode {
 	    LATEST, TOP, RANDOM
 	}
-	protected Mode previouslyLoadedMode; // Restored if page load failed.
-	protected Mode mode;
+	protected Mode previouslyLoadedMode = Mode.LATEST; // Restored if page load failed.
+	protected Mode mode = Mode.LATEST;
 	protected int previouslyLoadedPage; // Restored if page load failed.
 	protected int page;
 	protected boolean enablePageChange = true;
