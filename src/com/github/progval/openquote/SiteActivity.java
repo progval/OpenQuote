@@ -5,10 +5,8 @@ package com.github.progval.openquote;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.text.InputType;
@@ -62,8 +60,8 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	/* ************************************
 	 *  Storage
 	 *************************************/
-	private static ArrayList<SiteItem> listItems = new ArrayList<SiteItem>();
-	private static ItemAdapter adapter;
+	public static ArrayList<SiteItem> listItems = new ArrayList<SiteItem>();
+	public static ItemAdapter adapter;
 
 
 
@@ -325,7 +323,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	 * @return An array of the quotes.
 	 * @throws IOException If something bad occurred with the network.
 	 */
-	private SiteItem[] getQuotes() throws IOException {
+	public SiteItem[] getQuotes() throws IOException {
 		switch(this.mode) {
 			case LATEST:
 				return this.getLatest(this.page);
@@ -364,75 +362,6 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	 *  Display quotes
 	 *************************************/
 
-	/**
-	 * Download and extract the quotes while displaying a ProgressDialog, and then dismiss the dialog and populate the current activity.
-	 */
-	private class AsyncQuotesFetcher extends AsyncTask<Void, Void, Void> {
-		private SiteItem[] items;
-		private String errorLog;
-		ProgressDialog dialog;
-		SiteActivity activity;
-		private void dismissDialog() {
-			try {
-				dialog.dismiss();
-			}
-			catch (IllegalArgumentException e) {
-				// Window has leaked
-			}
-		}
-		
-		public AsyncQuotesFetcher(SiteActivity activity) {
-			super();
-			this.activity = activity;
-		}
-
-		protected void onPreExecute() {
-			dialog = ProgressDialog.show(SiteActivity.this, "", getResources().getString(R.string.siteactivity_loading_quotes), true);
-		}
-
-		protected Void doInBackground(Void... foo) {
-			try {
-				items = SiteActivity.this.getQuotes();
-			}
-			catch (Exception e) {
-				if (e instanceof IOException) {
-					items = new SiteItem[0];
-				}
-				else {
-					errorLog = e.toString();
-				}
-			}
-			return null;
-		}
-		protected void onPostExecute(Void foo) {
-			dismissDialog();
-			if (errorLog != null) {
-				activity.showErrorDialog(String.format(getResources().getString(R.string.siteactivity_unknown_error), errorLog));
-			}
-			else if (items == null) {
-				activity.showErrorDialog(getResources().getString(R.string.siteactivity_no_errors_no_results));
-			}
-			else if (items.length > 0) {
-				activity.clearList();
-				for (SiteItem item : items) {
-					activity.addItem(item, false);
-				}
-				adapter.notifyDataSetChanged();
-				getListView().setSelectionAfterHeaderView();
-				activity.previouslyLoadedMode = activity.mode;
-				activity.previouslyLoadedPage = activity.page;
-			}
-			else {
-				activity.showIOExceptionDialog();
-			}
-			SiteActivity.this.page = SiteActivity.this.previouslyLoadedPage;
-			SiteActivity.this.mode = SiteActivity.this.previouslyLoadedMode;
-			if (SiteActivity.this.page == SiteActivity.this.getLowestPageNumber()) {
-				findViewById(R.id.buttonPrevious).setEnabled(false); // We open the first page
-			}
-			SiteActivity.this.updateTitle();
-		}
-	}
 	/** Load the quotes asynchronously, and add them to the ListView */
 	public void refresh() {
 		this.updateTitle();
@@ -444,7 +373,7 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	 * @param item The item to be added to the list
 	 * @param top If the item will be prepended to the list instead of appended.
 	 */
-	private void addItem(SiteItem item, boolean top) {
+	public void addItem(SiteItem item, boolean top) {
 		if (top) {
 			listItems.add(0, item);
 		}
