@@ -50,10 +50,10 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	public enum Mode {
 		LATEST, TOP, RANDOM
 	}
-	protected Mode previouslyLoadedMode = Mode.LATEST; // Restored if page load failed.
-	protected Mode mode = Mode.LATEST;
-	protected int previouslyLoadedPage; // Restored if page load failed.
-	protected int page;
+	protected static Mode previouslyLoadedMode = Mode.LATEST; // Restored if page load failed.
+	protected static Mode mode = Mode.LATEST;
+	protected static int previouslyLoadedPage; // Restored if page load failed.
+	protected static int page = -1;
 	/**
 	 * Determinates whether or not the user is allowed to use the previous/next button.
 	 */
@@ -62,8 +62,8 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	/* ************************************
 	 *  Storage
 	 *************************************/
-	private ArrayList<SiteItem> listItems = new ArrayList<SiteItem>();
-	ItemAdapter adapter;
+	private static ArrayList<SiteItem> listItems = new ArrayList<SiteItem>();
+	private static ItemAdapter adapter;
 
 
 
@@ -75,12 +75,24 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		this.page = this.getLowestPageNumber();
-		this.previouslyLoadedPage = this.page;
 		this.setAdapter();
 		this.bindButtons();
 		this.initializeContextMenu();
-		this.onClick(findViewById(R.id.buttonLatest));
+		if (page == -1) {
+			this.page = this.getLowestPageNumber();
+			this.previouslyLoadedPage = this.page;
+			this.onClick(findViewById(R.id.buttonLatest));
+		}
+		else {
+			if (this.page == this.getLowestPageNumber()) {
+				findViewById(R.id.buttonPrevious).setEnabled(false); // We open the first page
+			}
+			enablePageChange(this.enablePageChange);
+			if (this.page == this.getLowestPageNumber()) {
+				findViewById(R.id.buttonPrevious).setEnabled(false); // We open the first page
+			}
+			this.updateTitle();
+		}
 	}
 	// Called only be the constructor.
 	private void setAdapter() {
