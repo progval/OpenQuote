@@ -48,6 +48,11 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 	public enum Mode {
 		LATEST, TOP, RANDOM
 	}
+	/**
+	 * Used by onCreate in order to check whether the screen was rotated or the activity switched to another site.
+	 * For other use, use getName().
+	 */
+	protected static String name;
 	protected static Mode previouslyLoadedMode = Mode.LATEST; // Restored if page load failed.
 	protected static Mode mode = Mode.LATEST;
 	protected static int previouslyLoadedPage; // Restored if page load failed.
@@ -76,9 +81,10 @@ public abstract class SiteActivity extends ListActivity implements OnClickListen
 		this.setAdapter();
 		this.bindButtons();
 		this.initializeContextMenu();
-		if (page == -1) {
+		if (this.page == -1 || this.name != this.getName()) {
 			this.page = this.getLowestPageNumber();
 			this.previouslyLoadedPage = this.page;
+			this.clearList();
 			this.onClick(findViewById(R.id.buttonLatest));
 		}
 		else {
